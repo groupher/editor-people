@@ -1,10 +1,8 @@
 ![](https://badgen.net/badge/Editor.js/v2.0/blue)
 
-# Collapse Tool for Editor.js
+# People Tool for Editor.js
 
-Collapse Tool for the [Editor.js](https://editorjs.io).
-
-![collapse-demo](https://user-images.githubusercontent.com/6184465/69914380-c7476080-147e-11ea-8096-309eb5237038.gif)
+People Tool for the [Editor.js](https://editorjs.io).
 
 
 ## Installation
@@ -20,7 +18,7 @@ npm i --save-dev @groupher/editor-collapse
 Include module at your application
 
 ```javascript
-const Collapse = require('@groupher/editor-collapse');
+const People = require('@groupher/editor-people');
 ```
 
 ### Download to your project's source dir
@@ -39,7 +37,7 @@ var editor = EditorJS({
   
   tools: {
     ...
-    collapse: Collapse,
+    people: People,
   }
   
   ...
@@ -56,7 +54,7 @@ This Tool returns data object.
 
 ```json
 {
-    "type" : "collapse",
+    "type" : "people",
     "data" : {
       title: "",
       content: "",
