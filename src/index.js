@@ -8,9 +8,7 @@ import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light.css";
 
 import Icons from "./iconIndex";
-
-const peopleImgSrc =
-  "https://rmt.dogedoge.com/fetch/~/source/unsplash/photo-1557555187-23d685287bc3?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80";
+import GalleryUI from "./ui/gallery";
 
 /**
  * People Block for the Editor.js.
@@ -72,6 +70,8 @@ export default class People {
       block: this.api.styles.block,
       wrapper: "cdx-people",
       galleryWrapper: "cdx-people-gallery-wrapper",
+      galleryCard: "cdx-people-gallery-card",
+      galleryPreviewerWrapper: "cdx-people-gallery-previewer-wrapper",
       galleryAvatar: "cdx-people-gallery-avatar",
       galleryBox: "cdx-people-gallery-box",
       galleryBoxTitle: "cdx-people-gallery-box-title",
@@ -89,6 +89,12 @@ export default class People {
 
     this.element = null;
     this.data = data;
+
+    this.galleryUI = new GalleryUI({
+      api,
+      config,
+      // data: this._data,
+    });
   }
 
   /**
@@ -98,59 +104,11 @@ export default class People {
    */
   drawView() {
     const Wrapper = make("DIV", [this.CSS.block, this.CSS.wrapper], {});
-    const GalleryWrapper = make("DIV", [this.CSS.galleryWrapper]);
+    const GalleryCardEl = this.galleryUI.drawCard();
 
-    const avatarEl = this.buildGalleryAvatar();
-    const galleryCardEl = this.buildGalleryCard();
-
-    GalleryWrapper.appendChild(avatarEl);
-    GalleryWrapper.appendChild(galleryCardEl);
-
-    Wrapper.appendChild(GalleryWrapper);
+    Wrapper.appendChild(GalleryCardEl);
 
     return Wrapper;
-  }
-  /**
-   * create a gallery card
-   * @return {HTMLElement}
-   * @private
-   */
-  buildGalleryAvatar() {
-    const avatarEl = make("img", this.CSS.galleryAvatar, {
-      src: peopleImgSrc,
-    });
-
-    return avatarEl;
-  }
-
-  /**
-   * create a gallery card
-   * @return {HTMLElement}
-   * @private
-   */
-  buildGalleryCard() {
-    const boxEl = make("DIV", this.CSS.galleryBox);
-
-    const titleEl = make("DIV", this.CSS.galleryBoxTitle, {
-      innerHTML: "我是山三",
-      contentEditable: true,
-    });
-
-    const bioEl = make("DIV", this.CSS.galleryBoxBio, {
-      innerHTML: "UI/UX designer",
-      contentEditable: true,
-    });
-    const descEl = make("DIV", this.CSS.galleryBoxDesc, {
-      innerHTML:
-        "特别是太空军事化竞赛中争取一个有利位置是至关重要的，但由于资金不足，这些饼有多少可以最终拿出成果，以当下的投入和进度而言，难言乐观",
-      contentEditable: true,
-    });
-
-    boxEl.appendChild(titleEl);
-    boxEl.appendChild(bioEl);
-    boxEl.appendChild(descEl);
-
-    return boxEl;
   }
 
   /**
