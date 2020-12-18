@@ -1,4 +1,4 @@
-import { make, clazz } from "@groupher/editor-utils";
+import { make, clazz, replaceEl } from "@groupher/editor-utils";
 
 import css from "../styles/gallery.css";
 
@@ -30,13 +30,14 @@ export default class Ui {
           avatar: peopleImgSrc2,
           title: "simon2",
           bio: "life is fucked",
-          desc:
-            "特别是太空军事化竞赛中争取一个有利位置是至关重要的，但由于资金不足，这些饼有多少可以最终拿出成果，以当下的投入和进度而言，难言乐观",
+          desc: "这个是比较短的介绍",
         },
       ],
     };
 
     this.PreviewerEl = null;
+    this.AvatarEl = null;
+    this.BoxEl = null;
   }
 
   /**
@@ -80,11 +81,11 @@ export default class Ui {
 
     const PreviewerEl = this._drawPreviewer();
 
-    const AvatarEl = this._drawAvatar(activePeople);
-    const BoxEl = this._drawBox(activePeople);
+    this.AvatarEl = this._drawAvatar(activePeople);
+    this.BoxEl = this._drawBox(activePeople);
 
-    CardEl.appendChild(AvatarEl);
-    CardEl.appendChild(BoxEl);
+    CardEl.appendChild(this.AvatarEl);
+    CardEl.appendChild(this.BoxEl);
 
     if (isMoreThanOneUser) {
       Wrapper.appendChild(PreviewerEl);
@@ -111,13 +112,12 @@ export default class Ui {
     this.PreviewerEl = make("DIV", this.CSS.galleryPreviewerWrapper);
 
     this.data.items.map((people) => {
-      const AvatarEl = this._drawPreviewAvatar(people);
-      AvatarEl.addEventListener("click", () => {
-        console.log("click people");
+      const PeopleEl = this._drawPreviewAvatar(people);
+      PeopleEl.addEventListener("click", () => {
         this._selectPeople(people);
       });
 
-      this.PreviewerEl.appendChild(AvatarEl);
+      this.PreviewerEl.appendChild(PeopleEl);
     });
 
     return this.PreviewerEl;
@@ -148,6 +148,15 @@ export default class Ui {
 
     clazz.add(newActivePreviewerItemEl, this.CSS.galleryPreviewerItemActive);
     newActivePreviewerItemEl.setAttribute("data-previewer-active", true);
+
+    const activePeople = this.data.items.filter((item) => item.active)[0];
+    console.log("activePeople -----> ", activePeople.avatar);
+
+    this.AvatarEl.src = activePeople.avatar;
+
+    const TheNewBoxEl = this._drawBox(activePeople);
+    replaceEl(this.BoxEl, TheNewBoxEl, this.api);
+    this.BoxEl = TheNewBoxEl;
   }
 
   /**
@@ -199,7 +208,7 @@ export default class Ui {
    * @private
    */
   _drawBox(people) {
-    const BoxEl = make("DIV", this.CSS.galleryBox);
+    const Wrapper = make("DIV", this.CSS.galleryBox);
     const TitleEl = make("INPUT", this.CSS.galleryBoxTitle, {
       value: people.title,
       contentEditable: true,
@@ -218,10 +227,10 @@ export default class Ui {
       placeholder: "详细介绍",
     });
 
-    BoxEl.appendChild(TitleEl);
-    BoxEl.appendChild(BioEl);
-    BoxEl.appendChild(DescEl);
+    Wrapper.appendChild(TitleEl);
+    Wrapper.appendChild(BioEl);
+    Wrapper.appendChild(DescEl);
 
-    return BoxEl;
+    return Wrapper;
   }
 }
