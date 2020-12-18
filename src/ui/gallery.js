@@ -1,4 +1,4 @@
-import { make } from "@groupher/editor-utils";
+import { make, clazz } from "@groupher/editor-utils";
 
 import css from "../styles/gallery.css";
 
@@ -17,6 +17,7 @@ export default class Ui {
       type: "gallery", // or list
       items: [
         {
+          id: 1,
           active: true,
           avatar: peopleImgSrc,
           title: "mydearxym",
@@ -25,6 +26,7 @@ export default class Ui {
             "特别是太空军事化竞赛中争取一个有利位置是至关重要的，但由于资金不足，这些饼有多少可以最终拿出成果，以当下的投入和进度而言，难言乐观",
         },
         {
+          id: 2,
           avatar: peopleImgSrc2,
           title: "simon2",
           bio: "life is fucked",
@@ -33,6 +35,8 @@ export default class Ui {
         },
       ],
     };
+
+    this.PreviewerEl = null;
   }
 
   /**
@@ -62,17 +66,30 @@ export default class Ui {
    * @private
    */
   drawCard() {
+    let activePeople;
+    const isMoreThanOneUser = this.data.items.length > 1;
+
+    if (isMoreThanOneUser) {
+      activePeople = this.data.items.filter((item) => item.active)[0];
+    } else {
+      activePeople = this.data.items[0];
+    }
+
     const Wrapper = make("DIV", [this.CSS.galleryWrapper]);
     const CardEl = make("DIV", this.CSS.galleryCard);
 
     const PreviewerEl = this._drawPreviewer();
-    const AvatarEl = this._drawAvatar();
-    const BoxEl = this._drawBox();
+
+    const AvatarEl = this._drawAvatar(activePeople);
+    const BoxEl = this._drawBox(activePeople);
 
     CardEl.appendChild(AvatarEl);
     CardEl.appendChild(BoxEl);
 
-    Wrapper.appendChild(PreviewerEl);
+    if (isMoreThanOneUser) {
+      Wrapper.appendChild(PreviewerEl);
+    }
+
     Wrapper.appendChild(CardEl);
 
     return Wrapper;
@@ -84,14 +101,53 @@ export default class Ui {
    * @private
    */
   _drawPreviewer() {
-    const Wrapper = make("DIV", this.CSS.galleryPreviewerWrapper);
+    const isMoreThanOneUser = this.data.items.length > 1;
+
+    if (!isMoreThanOneUser) {
+      this.PreviewerEl = null;
+      return this.PreviewerEl;
+    }
+
+    this.PreviewerEl = make("DIV", this.CSS.galleryPreviewerWrapper);
 
     this.data.items.map((people) => {
       const AvatarEl = this._drawPreviewAvatar(people);
-      Wrapper.appendChild(AvatarEl);
+      AvatarEl.addEventListener("click", () => {
+        console.log("click people");
+        this._selectPeople(people);
+      });
+
+      this.PreviewerEl.appendChild(AvatarEl);
     });
 
-    return Wrapper;
+    return this.PreviewerEl;
+  }
+
+  /*
+   * select people as current active one
+   */
+  _selectPeople({ id }) {
+    for (let index = 0; index < this.data.items.length; index++) {
+      const people = this.data.items[index];
+      if (people.id === id) {
+        people.active = true;
+      } else {
+        people.active = false;
+      }
+    }
+
+    const activePreviewerItemEl = document.querySelector(
+      '[data-previewer-active="true"]'
+    );
+    const newActivePreviewerItemEl = document.querySelector(
+      `[data-previewer-id="${id}"]`
+    );
+
+    clazz.remove(activePreviewerItemEl, this.CSS.galleryPreviewerItemActive);
+    activePreviewerItemEl.setAttribute("data-previewer-active", false);
+
+    clazz.add(newActivePreviewerItemEl, this.CSS.galleryPreviewerItemActive);
+    newActivePreviewerItemEl.setAttribute("data-previewer-active", true);
   }
 
   /**
@@ -104,10 +160,14 @@ export default class Ui {
       ? [this.CSS.galleryPreviewerItem, this.CSS.galleryPreviewerItemActive]
       : this.CSS.galleryPreviewerItem;
 
-    const Wrapper = make("div", wrapperCSS);
+    const Wrapper = make("div", wrapperCSS, {
+      "data-previewer-active": !!people.active,
+      "data-previewer-id": people.id,
+    });
 
     const AvatarEl = make("img", this.CSS.galleryPreviewerAvatar, {
       src: people.avatar,
+      loading: "eager",
     });
 
     const TitleEl = make("div", this.CSS.galleryPreviewerTitle, {
@@ -125,9 +185,9 @@ export default class Ui {
    * @return {HTMLElement}
    * @private
    */
-  _drawAvatar() {
+  _drawAvatar(people) {
     const AvatarEl = make("img", this.CSS.galleryAvatar, {
-      src: peopleImgSrc,
+      src: people.avatar,
     });
 
     return AvatarEl;
@@ -138,20 +198,21 @@ export default class Ui {
    * @return {HTMLElement}
    * @private
    */
-  _drawBox() {
+  _drawBox(people) {
     const BoxEl = make("DIV", this.CSS.galleryBox);
     const TitleEl = make("INPUT", this.CSS.galleryBoxTitle, {
+      value: people.title,
       contentEditable: true,
       placeholder: "姓名或昵称",
     });
 
     const BioEl = make("INPUT", this.CSS.galleryBoxBio, {
-      value: "",
+      value: people.bio,
       contentEditable: true,
       placeholder: "简短描述",
     });
     const DescEl = make("DIV", this.CSS.galleryBoxDesc, {
-      innerHTML: "",
+      innerHTML: people.desc,
       // "特别是太空军事化竞赛中争取一个有利位置是至关重要的，但由于资金不足，这些饼有多少可以最终拿出成果，以当下的投入和进度而言，难言乐观",
       contentEditable: true,
       placeholder: "详细介绍",

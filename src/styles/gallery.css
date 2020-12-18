@@ -27,6 +27,8 @@
 
   margin-left: 20px;
   margin-bottom: 25px;
+
+  transition: opacity 0.25s;
 }
 
 .cdx-people-gallery-previewer-item-active {
@@ -82,7 +84,7 @@
   display: flex;
   flex-direction: column;
   min-height: 220px;
-  min-width: 100%;
+  width: 100%;
   margin-left: -80px;
   padding-left: 100px;
   padding-right: 12px;
