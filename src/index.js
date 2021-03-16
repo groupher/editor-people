@@ -2,13 +2,12 @@ import { make } from "@groupher/editor-utils";
 /**
  * Build styles
  */
-import css from "./index.css";
-import tippy, { hideAll } from "tippy.js";
-import "tippy.js/dist/tippy.css";
-import "tippy.js/themes/light.css";
+import css from "./styles/index.css";
 
 import Icons from "./iconIndex";
+
 import GalleryUI from "./ui/gallery";
+import ListUI from "./ui/list";
 
 /**
  * People Block for the Editor.js.
@@ -95,6 +94,12 @@ export default class People {
       config,
       // data: this._data,
     });
+
+    this.listUI = new ListUI({
+      api,
+      config,
+      // data: this._data,
+    });
   }
 
   /**
@@ -105,8 +110,10 @@ export default class People {
   drawView() {
     const Wrapper = make("DIV", [this.CSS.block, this.CSS.wrapper], {});
     const GalleryCardEl = this.galleryUI.drawCard();
+    // const ListCardsEl = this.listUI.drawList();
 
     Wrapper.appendChild(GalleryCardEl);
+    // Wrapper.appendChild(ListCardsEl);
 
     return Wrapper;
   }

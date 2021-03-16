@@ -1,0 +1,81 @@
+.cdx-people-list-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+.cdx-people-list-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fbfbfb;
+  border: 1px solid #e8e8e8;
+  width: 100%;
+  width: 200px;
+  height: 200px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+.cdx-people-list-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  z-index: 1;
+}
+
+.cdx-people-list-box {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 20px;
+}
+
+.cdx-people-list-box-title {
+  font-size: 18px;
+  color: grey;
+  background: #fbfbfb;
+  margin-top: 12px;
+  border: none;
+  outline: none;
+  text-align: center;
+}
+
+.cdx-people-list-box-title::placeholder {
+  font-style: italic;
+  color: grey;
+  opacity: 0.8;
+}
+
+.cdx-people-list-box-bio {
+  font-size: 15px;
+  margin-bottom: 10px;
+  color: #c1c1c1;
+  background: #fbfbfb;
+  border: none;
+  outline: none;
+  text-align: center;
+}
+
+.cdx-people-list-box-bio::placeholder {
+  font-style: italic;
+  color: #c1c1c1;
+  opacity: 0.9;
+}
+
+.cdx-people-list-box-desc {
+  font-size: 14px;
+  padding-left: 2px;
+  margin-bottom: 28px;
+  outline: none;
+}
+
+.cdx-people-list-box-desc[placeholder]:empty:before {
+  content: attr(placeholder);
+  font-style: italic;
+  color: #c1c1c1;
+}

@@ -4,6 +4,8 @@
   justify-content: center;
   align-items: center;
   width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .cdx-people-gallery-previewer-wrapper {
@@ -11,9 +13,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  min-height: 50px;
   width: 100%;
-  margin-top: 20px;
   margin-bottom: 10px;
 }
 
@@ -24,9 +24,7 @@
   justify-content: center;
   opacity: 0.6;
   cursor: pointer;
-
-  margin-left: 20px;
-  margin-bottom: 25px;
+  margin-left: 16px;
 
   transition: opacity 0.25s;
 }
@@ -44,39 +42,38 @@
   background: #76c5e4;
   position: absolute;
   top: -12px;
-  left: 15px;
+  left: 8px;
   border-radius: 3px;
 }
 
 .cdx-people-gallery-previewer-avatar {
-  height: 50px;
-  width: 50px;
+  height: 35px;
+  width: 35px;
   border-radius: 50%;
   display: block;
-}
-
-.cdx-people-gallery-previewer-title {
-  font-size: 12px;
-  color: grey;
-  margin-top: 4px;
-  text-align: center;
-
-  width: 50px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .cdx-people-gallery-card {
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 100%;
+  align-items: flex-start;
+  min-width: 50%;
+  padding: 40px;
+  padding-top: 25px;
+  margin: 0 30px;
+  border-radius: 10px;
 }
 
 .cdx-people-gallery-avatar {
-  width: 160px;
-  height: 160px;
+  width: 145px;
+  border-radius: 100%;
+  z-index: 1;
+}
+
+.cdx-people-gallery-avatar img {
+  width: 90px;
+  height: 90px;
+  margin-top: 4px;
   border-radius: 100%;
   z-index: 1;
 }
@@ -84,19 +81,16 @@
 .cdx-people-gallery-box {
   display: flex;
   flex-direction: column;
-  min-height: 220px;
   width: 100%;
-  margin-left: -80px;
-  padding-left: 100px;
   padding-right: 15px;
-  border: 1px solid #dadada;
   border-radius: 20px;
 }
 
 .cdx-people-gallery-box-title {
   font-size: 18px;
-  color: grey;
-  margin-top: 30px;
+  background-color: transparent;
+  font-weight: bold;
+  color: #5f5f5f;
   border: none;
   outline: none;
 }
@@ -109,9 +103,10 @@
 
 .cdx-people-gallery-box-bio {
   font-size: 15px;
-  margin-top: 8px;
-  margin-bottom: 10px;
+  background-color: transparent;
   color: #c1c1c1;
+  margin-top: 4px;
+  margin-bottom: 10px;
   border: none;
   outline: none;
 }
@@ -123,9 +118,9 @@
 }
 
 .cdx-people-gallery-box-desc {
+  color: #5f5f5f;
   font-size: 14px;
   padding-left: 2px;
-  margin-bottom: 28px;
   outline: none;
 }
 

@@ -8,7 +8,7 @@ const peopleImgSrc =
 const peopleImgSrc2 =
   "https://rmt.dogedoge.com/fetch/~/source/unsplash/photo-1484399172022-72a90b12e3c1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80";
 
-export default class Ui {
+export default class GalleryUI {
   constructor({ api, config }) {
     this.api = api;
     this.config = config;
@@ -52,7 +52,6 @@ export default class Ui {
       galleryPreviewerItem: "cdx-people-gallery-previewer-item",
       galleryPreviewerItemActive: "cdx-people-gallery-previewer-item-active",
       galleryPreviewerAvatar: "cdx-people-gallery-previewer-avatar",
-      galleryPreviewerTitle: "cdx-people-gallery-previewer-title",
       galleryAvatar: "cdx-people-gallery-avatar",
       galleryBox: "cdx-people-gallery-box",
       galleryBoxTitle: "cdx-people-gallery-box-title",
@@ -82,6 +81,7 @@ export default class Ui {
     const PreviewerEl = this._drawPreviewer();
 
     this.AvatarEl = this._drawAvatar(activePeople);
+    // this._drawAvatar(activePeople);
     this.BoxEl = this._drawBox(activePeople);
 
     CardEl.appendChild(this.AvatarEl);
@@ -150,9 +150,8 @@ export default class Ui {
     newActivePreviewerItemEl.setAttribute("data-previewer-active", true);
 
     const activePeople = this.data.items.filter((item) => item.active)[0];
-    console.log("activePeople -----> ", activePeople.avatar);
 
-    this.AvatarEl.src = activePeople.avatar;
+    this.AvatarEl.firstElementChild.src = activePeople.avatar;
 
     const TheNewBoxEl = this._drawBox(activePeople);
     replaceEl(this.BoxEl, TheNewBoxEl, this.api);
@@ -177,14 +176,10 @@ export default class Ui {
     const AvatarEl = make("img", this.CSS.galleryPreviewerAvatar, {
       src: people.avatar,
       loading: "eager",
-    });
-
-    const TitleEl = make("div", this.CSS.galleryPreviewerTitle, {
-      innerHTML: people.title,
+      "data-skip-plus-button": true,
     });
 
     Wrapper.appendChild(AvatarEl);
-    Wrapper.appendChild(TitleEl);
 
     return Wrapper;
   }
@@ -195,11 +190,15 @@ export default class Ui {
    * @private
    */
   _drawAvatar(people) {
-    const AvatarEl = make("img", this.CSS.galleryAvatar, {
+    const WrapperEl = make("div", this.CSS.galleryAvatar);
+
+    const AvatarEl = make("img", "", {
       src: people.avatar,
     });
 
-    return AvatarEl;
+    WrapperEl.appendChild(AvatarEl);
+
+    return WrapperEl;
   }
 
   /**
