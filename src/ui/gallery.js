@@ -1,6 +1,11 @@
-import { make, clazz, replaceEl } from "@groupher/editor-utils";
+import { make, clazz, replaceEl, cutFrom } from "@groupher/editor-utils";
 
 import css from "../styles/gallery.css";
+
+import TwitterIcon from "../icon/social/twitter.svg";
+import ZhihuIcon from "../icon/social/zhihu.svg";
+import GlobalIcon from "../icon/social/global.svg";
+import LinkedInIcon from "../icon/social/linkedin.svg";
 
 const peopleImgSrc =
   "https://rmt.dogedoge.com/fetch/~/source/unsplash/photo-1557555187-23d685287bc3?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80";
@@ -81,8 +86,7 @@ export default class GalleryUI {
     const PreviewerEl = this._drawPreviewer();
 
     this.AvatarEl = this._drawAvatar(activePeople);
-    // this._drawAvatar(activePeople);
-    this.BoxEl = this._drawBox(activePeople);
+    this.BoxEl = this._drawIntroBox(activePeople);
 
     CardEl.appendChild(this.AvatarEl);
     CardEl.appendChild(this.BoxEl);
@@ -153,7 +157,7 @@ export default class GalleryUI {
 
     this.AvatarEl.firstElementChild.src = activePeople.avatar;
 
-    const TheNewBoxEl = this._drawBox(activePeople);
+    const TheNewBoxEl = this._drawIntroBox(activePeople);
     replaceEl(this.BoxEl, TheNewBoxEl, this.api);
     this.BoxEl = TheNewBoxEl;
   }
@@ -206,7 +210,7 @@ export default class GalleryUI {
    * @return {HTMLElement}
    * @private
    */
-  _drawBox(people) {
+  _drawIntroBox(people) {
     const Wrapper = make("DIV", this.CSS.galleryBox);
     const TitleEl = make("INPUT", this.CSS.galleryBoxTitle, {
       value: people.title,
@@ -218,17 +222,66 @@ export default class GalleryUI {
       value: people.bio,
       contentEditable: true,
       placeholder: "简短描述",
+      "data-skip-plus-button": true,
     });
     const DescEl = make("DIV", this.CSS.galleryBoxDesc, {
-      innerHTML: people.desc,
+      innerHTML: cutFrom(people.desc, 70),
       // "特别是太空军事化竞赛中争取一个有利位置是至关重要的，但由于资金不足，这些饼有多少可以最终拿出成果，以当下的投入和进度而言，难言乐观",
       contentEditable: true,
       placeholder: "详细介绍",
     });
 
+    const SocialListEl = this._drawSocialList();
+
     Wrapper.appendChild(TitleEl);
     Wrapper.appendChild(BioEl);
     Wrapper.appendChild(DescEl);
+    Wrapper.appendChild(SocialListEl);
+
+    return Wrapper;
+  }
+
+  /**
+   * draw user's social list
+   *
+   * @returns
+   * @memberof GalleryUI
+   */
+  _drawSocialList() {
+    const Wrapper = make("DIV", "cdx-people-gallery-social-wrapper");
+    const SOCIAL_LIST = [
+      {
+        title: "Twitter",
+        icon: TwitterIcon,
+        value: "",
+      },
+      {
+        title: "知乎",
+        icon: ZhihuIcon,
+        value: "",
+      },
+      {
+        title: "home",
+        icon: GlobalIcon,
+        value: "",
+      },
+      {
+        title: "LinkedIn",
+        icon: LinkedInIcon,
+        value: "",
+      },
+    ];
+
+    for (let i = 0; i < SOCIAL_LIST.length; i++) {
+      const social = SOCIAL_LIST[i];
+      const SocialEl = make("a", "cdx-people-gallery-social-icon", {
+        innerHTML: social.icon,
+      });
+
+      this.api.tooltip.onHover(SocialEl, social.title, { delay: 200 });
+
+      Wrapper.appendChild(SocialEl);
+    }
 
     return Wrapper;
   }

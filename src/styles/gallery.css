@@ -60,19 +60,19 @@
   min-width: 50%;
   padding: 40px;
   padding-top: 25px;
-  margin: 0 30px;
+  margin: 0 20px;
   border-radius: 10px;
 }
 
 .cdx-people-gallery-avatar {
-  width: 145px;
+  width: 200px;
   border-radius: 100%;
   z-index: 1;
 }
 
 .cdx-people-gallery-avatar img {
-  width: 90px;
-  height: 90px;
+  width: 120px;
+  height: 120px;
   margin-top: 4px;
   border-radius: 100%;
   z-index: 1;
@@ -104,7 +104,7 @@
 .cdx-people-gallery-box-bio {
   font-size: 15px;
   background-color: transparent;
-  color: #c1c1c1;
+  color: #a2a2a2;
   margin-top: 4px;
   margin-bottom: 10px;
   border: none;
@@ -128,4 +128,35 @@
   content: attr(placeholder);
   font-style: italic;
   color: #c1c1c1;
+}
+
+.cdx-people-gallery-social-wrapper {
+  display: flex;
+  align-items: center;
+  margin-top: 14px;
+  margin-left: 1px;
+}
+
+.cdx-people-gallery-social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: #889cab;
+  border-radius: 100%;
+  margin-right: 10px;
+
+  transition: all 0.25s;
+}
+
+.cdx-people-gallery-social-icon:hover {
+  cursor: pointer;
+  background: #4f575d;
+}
+
+.cdx-people-gallery-social-icon svg {
+  fill: white;
+  width: 12px;
+  height: 12px;
 }
