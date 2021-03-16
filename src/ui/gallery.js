@@ -2,6 +2,7 @@ import { make, clazz, replaceEl, cutFrom } from "@groupher/editor-utils";
 
 import css from "../styles/gallery.css";
 
+import GithubIcon from "../icon/social/github.svg";
 import TwitterIcon from "../icon/social/twitter.svg";
 import ZhihuIcon from "../icon/social/zhihu.svg";
 import GlobalIcon from "../icon/social/global.svg";
@@ -140,10 +141,10 @@ export default class GalleryUI {
       }
     }
 
-    const activePreviewerItemEl = document.querySelector(
+    const activePreviewerItemEl = this.PreviewerEl.querySelector(
       '[data-previewer-active="true"]'
     );
-    const newActivePreviewerItemEl = document.querySelector(
+    const newActivePreviewerItemEl = this.PreviewerEl.querySelector(
       `[data-previewer-id="${id}"]`
     );
 
@@ -250,6 +251,11 @@ export default class GalleryUI {
   _drawSocialList() {
     const Wrapper = make("DIV", "cdx-people-gallery-social-wrapper");
     const SOCIAL_LIST = [
+      {
+        title: "Github",
+        icon: GithubIcon,
+        value: "",
+      },
       {
         title: "Twitter",
         icon: TwitterIcon,
