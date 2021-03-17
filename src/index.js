@@ -78,28 +78,27 @@ export default class People {
       galleryBoxDesc: "cdx-people-gallery-box-desc",
     };
 
-    this.data = {
-      title: data.title || "",
-      content: data.content || "",
-    };
+    // this._data = data;
+    this._data = data;
 
     this.TitleInput = null;
     this.CollapseContent = null;
 
     this.element = null;
-    this.data = data;
 
     this.galleryUI = new GalleryUI({
       api,
       config,
-      // data: this._data,
+      data: this._data,
     });
 
+    /**
     this.listUI = new ListUI({
       api,
       config,
-      // data: this._data,
+      data: this._data,
     });
+    */
   }
 
   /**

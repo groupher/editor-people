@@ -2,48 +2,18 @@ import { make, clazz, replaceEl, cutFrom } from "@groupher/editor-utils";
 
 import css from "../styles/gallery.css";
 
-import GithubIcon from "../icon/social/github.svg";
-import TwitterIcon from "../icon/social/twitter.svg";
-import ZhihuIcon from "../icon/social/zhihu.svg";
-import GlobalIcon from "../icon/social/global.svg";
-import LinkedInIcon from "../icon/social/linkedin.svg";
-
-const peopleImgSrc =
-  "https://rmt.dogedoge.com/fetch/~/source/unsplash/photo-1557555187-23d685287bc3?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80";
-
-const peopleImgSrc2 =
-  "https://rmt.dogedoge.com/fetch/~/source/unsplash/photo-1484399172022-72a90b12e3c1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80";
+import { SOCIAL_LIST, MODE } from "../constant";
 
 export default class GalleryUI {
-  constructor({ api, config }) {
+  constructor({ api, config, data }) {
     this.api = api;
     this.config = config;
 
-    this.data = {
-      type: "gallery", // or list
-      items: [
-        {
-          id: 1,
-          active: true,
-          avatar: peopleImgSrc,
-          title: "mydearxym",
-          bio: "life is great",
-          desc:
-            "特别是太空军事化竞赛中争取一个有利位置是至关重要的，但由于资金不足，这些饼有多少可以最终拿出成果，以当下的投入和进度而言，难言乐观",
-        },
-        {
-          id: 2,
-          avatar: peopleImgSrc2,
-          title: "simon2",
-          bio: "life is fucked",
-          desc: "这个是比较短的介绍",
-        },
-      ],
-    };
+    this._data = data;
 
     this.PreviewerEl = null;
     this.AvatarEl = null;
-    this.BoxEl = null;
+    this.IntroEl = null;
   }
 
   /**
@@ -59,10 +29,10 @@ export default class GalleryUI {
       galleryPreviewerItemActive: "cdx-people-gallery-previewer-item-active",
       galleryPreviewerAvatar: "cdx-people-gallery-previewer-avatar",
       galleryAvatar: "cdx-people-gallery-avatar",
-      galleryBox: "cdx-people-gallery-box",
-      galleryBoxTitle: "cdx-people-gallery-box-title",
-      galleryBoxBio: "cdx-people-gallery-box-bio",
-      galleryBoxDesc: "cdx-people-gallery-box-desc",
+      galleryIntro: "cdx-people-gallery-intro",
+      galleryIntroTitle: "cdx-people-gallery-intro-title",
+      galleryIntroBio: "cdx-people-gallery-intro-bio",
+      galleryIntroDesc: "cdx-people-gallery-intro-desc",
     };
   }
 
@@ -73,12 +43,12 @@ export default class GalleryUI {
    */
   drawCard() {
     let activePeople;
-    const isMoreThanOneUser = this.data.items.length > 1;
+    const isMoreThanOneUser = this._data.items.length > 1;
 
     if (isMoreThanOneUser) {
-      activePeople = this.data.items.filter((item) => item.active)[0];
+      activePeople = this._data.items.filter((item) => item.active)[0];
     } else {
-      activePeople = this.data.items[0];
+      activePeople = this._data.items[0];
     }
 
     const Wrapper = make("DIV", [this.CSS.galleryWrapper]);
@@ -87,10 +57,10 @@ export default class GalleryUI {
     const PreviewerEl = this._drawPreviewer();
 
     this.AvatarEl = this._drawAvatar(activePeople);
-    this.BoxEl = this._drawIntroBox(activePeople);
+    this.IntroEl = this._drawIntro(activePeople);
 
     CardEl.appendChild(this.AvatarEl);
-    CardEl.appendChild(this.BoxEl);
+    CardEl.appendChild(this.IntroEl);
 
     if (isMoreThanOneUser) {
       Wrapper.appendChild(PreviewerEl);
@@ -107,7 +77,7 @@ export default class GalleryUI {
    * @private
    */
   _drawPreviewer() {
-    const isMoreThanOneUser = this.data.items.length > 1;
+    const isMoreThanOneUser = this._data.items.length > 1;
 
     if (!isMoreThanOneUser) {
       this.PreviewerEl = null;
@@ -116,7 +86,7 @@ export default class GalleryUI {
 
     this.PreviewerEl = make("DIV", this.CSS.galleryPreviewerWrapper);
 
-    this.data.items.map((people) => {
+    this._data.items.map((people) => {
       const PeopleEl = this._drawPreviewAvatar(people);
       PeopleEl.addEventListener("click", () => {
         this._selectPeople(people);
@@ -132,8 +102,8 @@ export default class GalleryUI {
    * select people as current active one
    */
   _selectPeople({ id }) {
-    for (let index = 0; index < this.data.items.length; index++) {
-      const people = this.data.items[index];
+    for (let index = 0; index < this._data.items.length; index++) {
+      const people = this._data.items[index];
       if (people.id === id) {
         people.active = true;
       } else {
@@ -154,13 +124,13 @@ export default class GalleryUI {
     clazz.add(newActivePreviewerItemEl, this.CSS.galleryPreviewerItemActive);
     newActivePreviewerItemEl.setAttribute("data-previewer-active", true);
 
-    const activePeople = this.data.items.filter((item) => item.active)[0];
+    const activePeople = this._data.items.filter((item) => item.active)[0];
 
     this.AvatarEl.firstElementChild.src = activePeople.avatar;
 
-    const TheNewBoxEl = this._drawIntroBox(activePeople);
-    replaceEl(this.BoxEl, TheNewBoxEl, this.api);
-    this.BoxEl = TheNewBoxEl;
+    const TheNewIntroEl = this._drawIntro(activePeople);
+    replaceEl(this.IntroEl, TheNewIntroEl, this.api);
+    this.IntroEl = TheNewIntroEl;
   }
 
   /**
@@ -211,21 +181,21 @@ export default class GalleryUI {
    * @return {HTMLElement}
    * @private
    */
-  _drawIntroBox(people) {
-    const Wrapper = make("DIV", this.CSS.galleryBox);
-    const TitleEl = make("INPUT", this.CSS.galleryBoxTitle, {
+  _drawIntro(people) {
+    const Wrapper = make("DIV", this.CSS.galleryIntro);
+    const TitleEl = make("INPUT", this.CSS.galleryIntroTitle, {
       value: people.title,
       contentEditable: true,
       placeholder: "姓名或昵称",
     });
 
-    const BioEl = make("INPUT", this.CSS.galleryBoxBio, {
+    const BioEl = make("INPUT", this.CSS.galleryIntroBio, {
       value: people.bio,
       contentEditable: true,
       placeholder: "简短描述",
       "data-skip-plus-button": true,
     });
-    const DescEl = make("DIV", this.CSS.galleryBoxDesc, {
+    const DescEl = make("DIV", this.CSS.galleryIntroDesc, {
       innerHTML: cutFrom(people.desc, 70),
       // "特别是太空军事化竞赛中争取一个有利位置是至关重要的，但由于资金不足，这些饼有多少可以最终拿出成果，以当下的投入和进度而言，难言乐观",
       contentEditable: true,
@@ -250,33 +220,6 @@ export default class GalleryUI {
    */
   _drawSocialList() {
     const Wrapper = make("DIV", "cdx-people-gallery-social-wrapper");
-    const SOCIAL_LIST = [
-      {
-        title: "Github",
-        icon: GithubIcon,
-        value: "",
-      },
-      {
-        title: "Twitter",
-        icon: TwitterIcon,
-        value: "",
-      },
-      {
-        title: "知乎",
-        icon: ZhihuIcon,
-        value: "",
-      },
-      {
-        title: "home",
-        icon: GlobalIcon,
-        value: "",
-      },
-      {
-        title: "LinkedIn",
-        icon: LinkedInIcon,
-        value: "",
-      },
-    ];
 
     for (let i = 0; i < SOCIAL_LIST.length; i++) {
       const social = SOCIAL_LIST[i];
@@ -290,5 +233,25 @@ export default class GalleryUI {
     }
 
     return Wrapper;
+  }
+
+  get data() {
+    const _tmp = {
+      mode: MODE.GALLERY,
+      items: [
+        {
+          id: 2,
+          avatar:
+            "https://rmt.dogedoge.com/fetch/~/source/unsplash/photo-1484399172022-72a90b12e3c1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
+          title: "simon2",
+          bio: "life is fucked",
+          desc: "这个是比较短的介绍",
+        },
+      ],
+    };
+    // const data = this.exportData();
+    // this.setData(data);
+    // return data;
+    return {};
   }
 }
